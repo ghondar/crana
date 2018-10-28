@@ -7,7 +7,7 @@
   "main": "index.js",
   "scripts": {
     "publish": "git add . && git commit && npm publish",
-    "local-pack": "npm pack && rm -rf ../crana-no-git && mkdir ../crana-no-git && mv *.tgz ../crana-no-git && cd ../crana-no-git && tar -xvf *.tgz && cp package/. . -r && rm -rf package/ && rm -rf *.tgz && npm i && sudo npm link"
+    "local-pack": "yarn pack && rm -rf ../crana-no-git && mkdir ../crana-no-git && mv *.tgz ../crana-no-git && cd ../crana-no-git && tar -xvf *.tgz && cp -rf package/. . && rm -rf package/ && rm -rf *.tgz && yarn && sudo yarn link"
   },
   "keywords": [],
   "author": "",
