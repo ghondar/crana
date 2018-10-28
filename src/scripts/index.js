@@ -6,15 +6,25 @@ const {
 } = require('../paths');
 
 function countLines() {
-  return execCmd(`npx cloc ${appRootPath} --exclude-dir=node_modules,.git,build --exclude-ext=json`);
+  return execCmd(
+    `npx cloc ${appRootPath} --exclude-dir=node_modules,.git,build --exclude-ext=json`
+  );
 }
 
 function lintClient() {
   // Execute linting in parallel
-  execCmd(`npx eslint ${appClient}/**/*.js* --fix --config ${packageRootPath}/.eslintrc`, { async: true });
-  execCmd(`npx eslint ${appShared}/**/*.js* --fix --config ${packageRootPath}/.eslintrc`, { async: true });
-  execCmd(`npx stylelint ${appClient}/**/*.css --fix --config ${packageRootPath}/.stylelintrc`, { async: true });
-  execCmd(`npx stylelint ${appShared}/**/*.css --fix --config ${packageRootPath}/.stylelintrc`, { async: true });
+  execCmd(`npx eslint ${appClient}/**/*.js* --fix --config ${packageRootPath}/.eslintrc`, {
+    async: true
+  });
+  execCmd(`npx eslint ${appShared}/**/*.js* --fix --config ${packageRootPath}/.eslintrc`, {
+    async: true
+  });
+  execCmd(`npx stylelint ${appClient}/**/*.css --fix --config ${packageRootPath}/.stylelintrc`, {
+    async: true
+  });
+  execCmd(`npx stylelint ${appShared}/**/*.css --fix --config ${packageRootPath}/.stylelintrc`, {
+    async: true
+  });
 }
 
 function devClient() {
@@ -55,9 +65,18 @@ function devServer() {
   execCmd(cmd, { async: true });
 }
 
+function openBrowser() {
+  const cmd = `
+    npx opn http://localhost:8080/
+  `;
+
+  execCmd(cmd, { async: true });
+}
+
 function dev() {
   devServer();
   devClient();
+  openBrowser();
 }
 
 function buildClient() {
@@ -90,7 +109,7 @@ const commands = [
   {
     name: 'count-lines',
     fn: countLines,
-    description: 'See how many LOC you\'ve already written.'
+    description: "See how many LOC you've already written."
   },
   {
     name: 'lint:client',
@@ -134,12 +153,10 @@ async function preHook() {
   const error = 'The current directory is not a crana project!';
 
   const packageJSONpath = path.join(appRootPath, 'package.json');
-  if (!await fileExists(packageJSONpath))
-    return { error };
+  if (!(await fileExists(packageJSONpath))) return { error };
   /* eslint-disable-next-line */
   const packageJSON = require(packageJSONpath);
-  if (!packageJSON.crana)
-    return { error };
+  if (!packageJSON.crana) return { error };
   return { success: true };
 }
 
